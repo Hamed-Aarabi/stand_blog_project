@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% include 'includes/header_refrences.html' %}
+    <title>
+        {% if request.resolver_match.url_name == 'home' %}
+            Home
+        {% elif request.resolver_match.url_name == 'about' %}
+            About
+        {% elif request.resolver_match.url_name == 'blog' %}
+            Blog
+        {% elif request.resolver_match.url_name == 'contact' %}
+            Contact Us
+        {% else %}
+            {% block title %}
+            {% endblock %}
+        {% endif %}
+    </title>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- Header -->
+{% include 'includes/header.html' %}
+
+{% block content %}
+{% endblock %}
+
+
+{% include 'includes/footer.html' %}
+
+{% include 'includes/footer_refrences.html' %}
+
+</body>
+</html>

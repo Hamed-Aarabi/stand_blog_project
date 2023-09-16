@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_partial %}
+{% load social_share %}
+{% load filters %}
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="main-banner header-text">
+        <div class="container-fluid">
+            <div class="owl-banner owl-carousel">
+                {% for article in article_banner %}
+                    <div class="item">
+                        <img src="{{ article.image.url }}" alt="{{ article.title }}" width="200px" height="300px">
+                        <div class="item-content">
+                            <div class="main-content">
+                                <div class="meta-category">
+                                    {% for cat in article.categorie.all %}
+                                        <span>{{ cat }}</span>
+                                    {% endfor %}
+                                </div>
+                                <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                <ul class="post-info">
+                                    <li><a href="#">{{ article.author.username }}</a></li>
+                                    <li><a href="#">{{ article.created }}</a></li>
+                                    <li><a href="#">{{ article.viewers_counter }} views</a></li>
+                                    <li><a href="#">{{ article.comments.count }} Comments</a></li>
+                                    <li><a href="#">{{ article.like_counter }} Likes</a></li>
+                                    <li><a href="#">{{ article.dislike_counter }} Dislikes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <!-- Banner Ends Here -->
+
+
+    <section class="blog-posts">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            {% for art in object_list %}
+                                <div class="col-lg-12">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img src="{{ art.image.url }}" alt="" width="150px" height="400px">
+                                        </div>
+                                        <div class="down-content">
+                                            {% for cat in art.categorie.all %}
+                                                <span>{{ cat }}</span>
+                                            {% endfor %}
+                                            <a href="{{ art.get_absolute_url }}"><h4>{{ art.title }}</h4></a>
+                                            <ul class="post-info">
+                                                {% if art.author.first_name and art.author.last_name %}
+                                                    <li><a href="#">{{ art.author.get_full_name }}</a></li>
+                                                {% else %}
+                                                    <li><a href="#">{{ art.author }}</a></li>
+                                                {% endif %}
+                                                <li><a href="#">{{ art.created }}</a></li>
+                                                <li><a href="#">{{ art.viewers_counter }} views</a></li>
+                                                <li><a href="#">{{ art.comments.count }} Comments</a></li>
+                                                <li><a href="#">{{ art.like_counter }} Likes</a></li>
+                                                <li><a href="#">{{ art.dislike_counter }} Dislikes</a></li>
+                                            </ul>
+                                            <p>{{ art.body|show_body }}</p>
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <ul class="post-tags">
+                                                            <li><i class="fa fa-tags"></i></li>
+                                                            {% for tag in art.tags.all %}
+                                                                <li><a href="{% url 'blog:tags' tag %}">{{ tag }}</a>.
+                                                                </li>
+                                                            {% endfor %}
+
+                                                        </ul>
+                                                    </div>
+                                                    {% render_partial 'home:social_partial' art.id %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="col-lg-12">
+                                <div class="main-button">
+                                    <a href="{% url 'blog:blog' %}">View All Posts</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'includes/sidebar.html' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

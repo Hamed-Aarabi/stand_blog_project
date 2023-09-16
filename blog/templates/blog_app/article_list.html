@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_partial %}
+{% load my_custom_templatetags %}
+{% load filters %}
+{% block title %}
+    {% if request.user.is_authenticated == False %}
+        AnonymousUser
+    {% else %}
+        {{ request.user.get_full_name }}'s Articles
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Articles of</h4>
+                            <h2>{{ request.user.get_full_name }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- Banner Ends Here -->
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+
+                            {% if request.user.is_authenticated == False %}
+                                <p>Dear <i style="color: red">{{ request.user }}</i> , You must login for see your
+                                    articles.
+                                </p>
+                            {% else %}
+                                <ul class="list-group">
+                                    <p>You have <b>{{ articles_count }}</b> articles.</p>
+                                    {% for article in article_list %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <a href="{% url 'blog:blog_datail' article.slug %}"
+                                               style="text-decoration: none; color: black">{{ article.title }}</a>
+                                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                            <i class="fa fa-eye">&nbsp<span
+                                                    class="badge badge-primary badge-pill">{{ article.viewers }}</span></i>
+                                        </li>
+                                        <a href="{% url 'blog:article_edit' article.slug %}"
+                                           class="btn btn-success">Edit</a>
+                                        <a href="{% url 'blog:article_delete' article.slug %}" class="btn btn-danger">Delete</a>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+
+                            <div class="col-lg-12">
+                                {% if page_obj.has_other_pages %}
+                                    <ul class="page-numbers">
+                                        {% if page_obj.has_previous %}
+                                            <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                                    class="fa fa-angle-double-left"></i></a></li>
+                                        {% endif %}
+                                        {% for item in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == item %}
+                                                <li class="active"><a href="">{{ item }}</a></li>
+                                            {% else %}
+                                                <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        {{ item }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ item }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if page_obj.has_next %}
+                                            <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                                    class="fa fa-angle-double-right"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+    </section>
+{% endblock %}

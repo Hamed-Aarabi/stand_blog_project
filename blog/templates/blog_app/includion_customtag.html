@@ -1,0 +1,5 @@
+<ul>
+{% for tag in queryset %}
+     <li><a href="{% url 'blog:tags' tag %}">{{ tag }}</a></li>
+{% endfor %}
+</ul>

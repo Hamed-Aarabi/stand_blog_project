@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_partial %}
+{% load my_custom_templatetags %}
+{% load filters %}
+{% block title %}
+    {% if request.user.is_authenticated == False %}
+        AnonymousUser
+    {% else %}
+        {{ request.user.get_full_name }}'s Messages
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Messages</h4>
+                            <h2>{{ request.user.get_full_name }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- Banner Ends Here -->
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+
+                            {% if request.user.is_authenticated == False %}
+                                <p>Dear <i style="color: red">{{ request.user }}</i> , You must login for see your
+                                    message.
+                                </p>
+                            {% else %}
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">id</th>
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Body</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for blog in object_list %}
+                                        <tr>
+                                            <th scope="row">{{ blog.id }}</th>
+                                            <td>{{ blog.subject }}</td>
+                                            <td>{{ blog.body|truncatechars:5 }}</td>
+                                            <td>
+                                                <a href="{% url 'contact:update_messages' blog.id %}">
+                                                    <button type="button" class="btn btn-success">Edit</button>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'contact:delete_messages' blog.id %}">
+                                                    <button type="button" class="btn btn-danger">Delete</button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <p>Dear <i style="color: green">{{ request.user }}</i>, You have not sent a
+                                            message
+                                            yet
+                                        </p>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            {% endif %}
+
+
+                            <div class="col-lg-12">
+                                {% if page_obj.has_other_pages %}
+                                    <ul class="page-numbers">
+                                        {% if page_obj.has_previous %}
+                                            <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                                    class="fa fa-angle-double-left"></i></a></li>
+                                        {% endif %}
+                                        {% for item in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == item %}
+                                                <li class="active"><a href="">{{ item }}</a></li>
+                                            {% else %}
+                                                <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        {{ item }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ item }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if page_obj.has_next %}
+                                            <li><a href="?page=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                                    class="fa fa-angle-double-right"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+    </section>
+{% endblock %}
